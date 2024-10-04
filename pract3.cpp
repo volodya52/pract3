@@ -12,26 +12,126 @@ struct Node
 class DoublyLinkedList {
 public:
     Node* head, * tail;
-    int push_front() {
-        Node* node;
+    DoublyLinkedList():head(nullptr),tail(nullptr){}
+    void push_front(int value) {
+        Node* node=new Node(value);
+        if (head == nullptr)
+        {
+            head = tail = node;
+        }
+        else
+        {
+            node->next = head;
+            head->prev = node;
+            head = node;
+        }
     };
-    int push_back() {
+    void push_back(int value) {
+        Node* node = new Node(value);
 
+        if (head == nullptr)
+        {
+            tail = head = node;
+        }
+        else
+        {
+            node->prev = tail;
+            tail->next = node;
+            tail = node;
+        }
     };
-    int pop_front() {
-
+    void pop_front() {
+        Node* temp = head;
+        head = head->next;
+        if (head != nullptr)
+        {
+            head->prev = nullptr;
+        }
+        else
+        {
+            tail = nullptr;
+        }
+        delete temp;
     };
-    int pop_back() {
-
+    void pop_back() {
+        Node* temp = tail;
+        tail = tail->prev;
+        if (tail != nullptr)
+        {
+            tail->next = nullptr;
+        }
+        else
+        {
+            head = nullptr;
+        }
+        delete temp;
     };
     void display() {
-       
+        Node* node = head;
+        while (node != nullptr)
+        {
+            std::cout << node->data << " ";
+            node = node->next;
+        }
+        std::cout << std::endl;
     };
     void sort() {
+        Node* left = head;
+        Node* right = head->next;
 
+        bool check;
+
+        Node* temp = new Node(0);
+
+        if (left->next)
+        {
+            do
+            {
+                check = false;
+                while (right != nullptr)
+                {
+                    if (left->data > right->data)
+                    {
+                        temp->data = left->data;
+                        left->data = right->data;
+                        right->data = temp->data;
+                        check = true;
+                    }
+                    left = left->next;
+                    right = right->next;
+                }
+
+            } while (check);
+        }
+        delete temp;
     };
     void remove_duplicates() {
+        Node* node = head;
 
+        while (node != nullptr)
+        {
+            Node* number = node;
+            while (node->next != nullptr)
+            {
+                if (node->next->data == number->data)
+                {
+                    Node* d_num = node->next;
+                    node->next = node->next->next;
+                    if (node->next != nullptr)
+                    {
+                        node->next->prev = node;
+                    }
+                    delete d_num;
+                }
+                else
+                {
+                    node = node->next;
+                }
+
+            }
+            node = number->next;
+
+        }
     }
 };
 int main()
@@ -43,10 +143,16 @@ int main()
         std::cout << "\nSelect action\n1)Add an element to the beginning\n2)Add an element to the end\n3)Remove element from beginning\n4)Remove element from end\n5Show list\n6)Sort list\n7)Remove duplicates\n8)Exit\n";
         std::cin >> a;
         if (a == 1) {
-            b.push_front();
+            int c;
+            std::cout << "Enter the number";
+            std::cin >> c;
+            b.push_front(c);
         }
         else if (a == 2) {
-            b.push_back();
+            int c;
+            std::cout << "Enter the number";
+            std::cin >> c;
+            b.push_back(c);
         }
         else if (a == 3) {
             b.pop_front();
@@ -66,6 +172,9 @@ int main()
         else if (a == 8) {
             std::cout << "Exit the programm";
             return 0;
+        }
+        else if (a > 8) {
+            std::cout << "Error";
         }
     }
    
